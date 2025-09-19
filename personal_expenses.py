@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 from datetime import date
 
 st.set_page_config(page_title="Personal Expense Tracker", layout="centered")
@@ -45,9 +44,6 @@ if not st.session_state["expenses"].empty:
 
     # Category-wise distribution
     st.subheader("📂 Category Breakdown")
-    category_summary = st.session_state["expenses"].groupby("Category")["Amount"].sum()
+    category_summary = st.session_state["expenses"].groupby("Category")["Amount"].sum().reset_index()
 
-    fig, ax = plt.subplots()
-    ax.pie(category_summary, labels=category_summary.index, autopct="%1.1f%%", startangle=90)
-    ax.axis("equal")
-    st.pyplot(fig)
+    st.bar_chart(category_summary.set_index("Category"))
